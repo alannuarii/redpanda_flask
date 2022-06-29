@@ -1,0 +1,90 @@
+{% extends 'layouts/base.html' %} {% block title %}
+<title>{{ title }}</title>
+{% endblock %} {% block content %}
+<main class="container-fluid data-feeder">
+  <div class="row mb-3">
+    <div class="col-6 nav-btn d-flex justify-content-start align-items-center">
+      <a href="{{ url_for('data_feeder' ) }}" class="btn btn-outline-success"><i class="bi-table"></i></a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <h4 class="text-center fw-bolder">FORECAST BEBAN FEEDER</h4>
+      <table class="table table-bordered text-center beban-feeder">
+        <thead>
+          <tr>
+            <th scope="col" colspan="22">{{today}}</th>
+          </tr>
+          <tr>
+            <th scope="col" rowspan="2" class="align-middle">Jam</th>
+            <th scope="col" colspan="7">PLTD Tahuna</th>
+            <th scope="col" colspan="5">PLTD Petta</th>
+            <th scope="col" colspan="4">PLTD Tamako</th>
+            <th scope="col" colspan="4">PLTD Lesabe</th>
+            <th scope="col" rowspan="2" class="bg-dark text-light align-middle">Total</th>
+          </tr>
+          <tr>
+            <th scope="col" class="align-middle">Kota</th>
+            <th scope="col" class="align-middle">Tona</th>
+            <th scope="col" class="align-middle">Kolongan</th>
+            <th scope="col" class="align-middle">Lesabe</th>
+            <th scope="col" class="align-middle">Tamako</th>
+            <th scope="col">Mineline Petta</th>
+            <th scope="col">Sub Total</th>
+            <th scope="col">Petta Kota</th>
+            <th scope="col">Mineline Tahuna</th>
+            <th scope="col" class="align-middle">Kendahe</th>
+            <th scope="col" class="align-middle">Bowongkulu</th>
+            <th scope="col">Sub Total</th>
+            <th scope="col">Kota Tamako</th>
+            <th scope="col" class="align-middle">Lapango</th>
+            <th scope="col" class="align-middle">Tahuna</th>
+            <th scope="col">Sub Total</th>
+            <th scope="col" class="align-middle">Salurang</th>
+            <th scope="col" class="align-middle">Pintareng</th>
+            <th scope="col">Tahuna (Income)</th>
+            <th scope="col">Sub Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rows %}
+          <tr>
+            {% for col, row_ in zip(columns, row) %}
+            <td>{{row_}}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal Upload Data-->
+  <div class="modal fade" id="modal-upload-data-feeder" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Upload File Beban Feeder</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="post" enctype="multipart/form-data" class="d-flex justify-content-end py-3">
+            <label for=""></label>
+            <input type="file" class="form-control" name="feeder" />
+            <input type="submit" class="btn btn-primary ms-2" value="Upload" />
+          </form>
+          <div>
+            <button class="btn btn-secondary">Download File</button>
+            <p class="fw-bolder mb-0 mt-2">Catatan:</p>
+            <ul>
+              <li>Ekstensi file harus Excel (.xlsx)</li>
+              <li>Dll</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Akhir Modal Upload Data  -->
+</main>
+{% endblock %}
