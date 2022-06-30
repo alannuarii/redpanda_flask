@@ -1,9 +1,12 @@
 from cgi import test
+import imp
 from app import app
 from app import db
 from flask import render_template, request, redirect, url_for
 from datetime import datetime, timedelta
 from app.models.feeder import Feeder
+from app.models.unit import Unit
+from app.models.mesin import Mesin
 import pandas as pd
 import numpy as np
 
@@ -15,7 +18,10 @@ conn = app.config['SQLALCHEMY_DATABASE_URI']
 
 @app.route('/')
 def index():
-    
+    # nama_mesin = 'PLTD Tahuna'
+    # tahuna = Unit(nama_mesin=nama_mesin)
+    # db.session.add(tahuna)
+    # db.session.commit()
     return render_template('pages/home.html', title='Home | RedPanda', active_home='active')
 
 

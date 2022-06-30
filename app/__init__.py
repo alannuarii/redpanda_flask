@@ -10,5 +10,5 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 
-from app.models import feeder
+from app.models import feeder, unit, mesin
 from app import routes

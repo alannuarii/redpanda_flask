@@ -1,5 +1,4 @@
 from app import db
-from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 
 class Feeder(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -21,7 +20,6 @@ class Feeder(db.Model):
     salurang = db.Column(db.Integer, nullable=True, default=0)
     pintareng = db.Column(db.Integer, nullable=True, default=0)
     tahunaincome = db.Column(db.Integer, nullable=True, default=0)
-
 
     def __repr__(self):
         return '<{}. {}>'.format(self.id, self.tanggal)
