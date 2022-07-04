@@ -7,6 +7,7 @@ class Mesin(db.Model):
     daya_mampu = db.Column(db.Integer, nullable=False)
     is_sewa = db.Column(db.Boolean, nullable=False)
     unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'))
+    hars = db.relationship('Har', backref='mesin', cascade="all, delete-orphan")
 
     def __repr__(self):
         return '<{}. {} Unit {}>'.format(self.id, self.nama_mesin, self.unit)

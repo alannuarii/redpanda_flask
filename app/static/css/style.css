@@ -20,6 +20,32 @@ body {
   padding-top: 4rem;
 }
 
+/* LOGIN */
+.form-signin {
+  margin-top: 8rem;
+}
+.form-signin .card {
+  max-width: 450px;
+  padding: 15px;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.form-signin img {
+  width: 65%;
+  top: -40px;
+}
+.form-signin h1 {
+  font-family: "Cooper Black", sans-serif;
+}
+
 /* NAVBAR */
 .navbar .navbar-nav .active {
   background-color: var(--color-bg);
@@ -42,4 +68,28 @@ body {
 }
 .data-feeder .beban-feeder {
   font-size: 12px;
+}
+
+/* PEMELIHARAAN */
+.rencana-pemeliharaan {
+  width: 100%;
+}
+.rencana-pemeliharaan .nav-btn .btn:not(:first-child) {
+  width: min-content;
+  margin-left: 10px;
+}
+.rencana-pemeliharaan .beban-feeder {
+  font-size: 12px;
+}
+.rencana-pemeliharaan .blank-data img {
+  width: 55%;
+}
+.rencana-pemeliharaan .blank-data p {
+  color: var(--color-text);
+  font-size: 30px;
+  font-weight: 700;
+}
+.rencana-pemeliharaan .input-tanggal input {
+  padding: 10px;
+  font-size: 20px;
 }

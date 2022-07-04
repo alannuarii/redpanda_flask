@@ -2,11 +2,16 @@ from cgi import test
 import imp
 from app import app
 from app import db
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 from datetime import datetime, timedelta
+from flask_login import current_user, login_user, logout_user, login_required
+from werkzeug.urls import url_parse
+from app.models.user import User
 from app.models.feeder import Feeder
+from app.models.har import Har
 from app.models.unit import Unit
 from app.models.mesin import Mesin
+
 import pandas as pd
 import numpy as np
 
@@ -15,18 +20,70 @@ import numpy as np
 # Initialization
 conn = app.config['SQLALCHEMY_DATABASE_URI']
 
+# Pemeliharaan
+P1 = [1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1]
+P2 = [1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1]
+P3 = [1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1]
+P4 = [1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1]
+P5 = [1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1]
+TO = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+SO = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+MO = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+PdM = [1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1]
+CM = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
+
+@app.route('/login', methods=['GET','POST'])
+def login():
+    tahun = datetime.now().strftime('%Y')
+
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
+    if request.method=='POST':
+        email = request.form['email']
+        password = request.form['password']
+        user = User.query.filter_by(email=email).first()
+
+        if not user:
+            flash('Anda memasukkan email yang salah')
+            return redirect(url_for('login'))
+        if not user.checkPassword(password):
+            flash('Anda memasukkan password yang salah')
+            return redirect(url_for('login'))
+
+        login_user(user)
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('index')
+        return redirect(next_page)
+
+    return render_template('pages/login.html', title='Login | RedPanda', tahun=tahun)
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
 
 @app.route('/')
+# @login_required
 def index():
-    # nama_mesin = 'PLTD Tahuna'
-    # tahuna = Unit(nama_mesin=nama_mesin)
-    # db.session.add(tahuna)
+    # name = 'Alan Nuari'
+    # email = 'email@alan.web.id'
+    # password = 'admin'
+    # level = 1
+    # admin = User(name=name, email=email, level=level)
+    # admin.setPassword(password)
+    # db.session.add(admin)
     # db.session.commit()
     return render_template('pages/home.html', title='Home | RedPanda', active_home='active')
 
 
 # FEEDER 
 @app.route('/data-feeder', methods=['GET','POST'])
+@login_required
 def data_feeder():
     if request.method == 'POST':
         feeder = request.files['feeder']
@@ -44,6 +101,7 @@ def data_feeder():
 
 
 @app.route('/forecast-feeder', methods=['GET','POST'])
+@login_required
 def forecast_feeder():
     today = datetime.now()
     day7 = today + timedelta(days=-7)
@@ -66,3 +124,40 @@ def forecast_feeder():
     forecast['total'] = forecast.iloc[0:24,1:16].sum(axis=1)
     
     return render_template('pages/feeder/forecast-feeder.html', title='Forecast Feeder | RedPanda', active_feeder='active', columns=forecast.columns.values, rows=list(forecast.values.tolist()), zip=zip, today=today.strftime('%d %B %Y'))
+
+
+
+# PEMELIHARAAN
+@app.route('/rencana-pemeliharaan', methods=['GET','POST'])
+@login_required
+def rencana_pemeliharaan():
+    mesins = Mesin.query.all()
+    query = request.args.get('tanggal')
+    hars = Har.query.filter_by(tanggal_jumat=query).all()
+
+    if query:
+        friday = datetime.strptime(query, '%Y-%m-%d')
+        delta_friday = friday + timedelta(days=+6)
+        tanggal_friday = friday.strftime('%A')
+
+        if request.method == 'POST':
+            result=request.form.to_dict(flat=False)
+            for i in range(len(mesins)):
+                tanggal_jumat = result['tanggal_jumat'][0]
+                jumat = result['jumat'][i]
+                sabtu = result['sabtu'][i]
+                minggu = result['minggu'][i]
+                senin = result['senin'][i]
+                selasa = result['selasa'][i]
+                rabu = result['rabu'][i]
+                kamis = result['kamis'][i]
+                mesin_id = result['mesin_id'][i]
+                har = Har(tanggal_jumat=tanggal_jumat, jumat=jumat, sabtu=sabtu, minggu=minggu, senin=senin, selasa=selasa, rabu=rabu, kamis=kamis, mesin_id=mesin_id)
+                db.session.add(har)
+                db.session.commit()
+
+        return render_template('pages/rencana-pemeliharaan.html', title='Rencana Pemeliharaan | RedPanda', active_har='active', mesins=mesins, hars=hars, delta_friday=delta_friday.date(), tanggal_friday=tanggal_friday)
+
+    
+        
+    return render_template('pages/rencana-pemeliharaan.html', title='Rencana Pemeliharaan | RedPanda', active_har='active', mesins=mesins, hars=hars)
