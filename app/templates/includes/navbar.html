@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">RedPanda</a>
+    <a class="navbar-brand me-4" href="#"><span style="color: #4a0e03">Red</span><span style="color: #ee2110">Panda</span></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -16,7 +16,24 @@
           <a class="nav-link {{active_har}}" href="{{ url_for('rencana_pemeliharaan' ) }}">Pemeliharaan</a>
         </li>
       </ul>
-      <button class="btn btn-outline-success"><i class="bi-person-circle me-2"></i>Admin</button>
+      <button class="btn btn-outline-light" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i class="bi-person-circle"></i></button>
     </div>
   </div>
 </nav>
+
+<!-- Navbar Offcanvas -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <!-- <h5 class="offcanvas-title" id="offcanvasRightLabel">Offcanvas right</h5> -->
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="row profile text-center">
+      <i class="bi-person-circle text-secondary"></i>
+      <h3 class="fw-bolder">{{current_user.name}}</h3>
+    </div>
+    <div class="row sign-out align-self-end">
+      <a href="{{ url_for('logout' ) }}" class="btn btn-primary d-flex align-items-center justify-content-center"><i class="bi-box-arrow-right me-2"></i>Sign Out</a>
+    </div>
+  </div>
+</div>

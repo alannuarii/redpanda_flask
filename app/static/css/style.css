@@ -17,15 +17,17 @@ a {
 
 body {
   /* min-height: 75rem; */
-  padding-top: 4rem;
+  padding-top: 5rem;
 }
 
 /* LOGIN */
 .form-signin {
   margin-top: 8rem;
 }
+.form-signin .row {
+  width: 30%;
+}
 .form-signin .card {
-  max-width: 450px;
   padding: 15px;
 }
 .form-signin input[type="email"] {
@@ -45,6 +47,9 @@ body {
 .form-signin h1 {
   font-family: "Cooper Black", sans-serif;
 }
+.form-signin p {
+  font-size: 10px;
+}
 
 /* NAVBAR */
 .navbar .navbar-nav .active {
@@ -52,6 +57,17 @@ body {
   color: var(--color-text);
   font-weight: 700;
   border-radius: 10px;
+}
+.navbar .navbar-brand span {
+  font-size: 2rem;
+  font-family: "Cooper Black", sans-serif;
+  -webkit-text-stroke: 0.3px var(--color-bg);
+}
+.offcanvas .profile i {
+  font-size: 10rem;
+}
+.offcanvas .sign-out i {
+  font-size: 25px;
 }
 
 /* HOME */
