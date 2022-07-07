@@ -13,8 +13,6 @@ from app.models.unit import Unit
 from app.models.mesin import Mesin
 
 import pandas as pd
-import numpy as np
-
 
 
 # Initialization
